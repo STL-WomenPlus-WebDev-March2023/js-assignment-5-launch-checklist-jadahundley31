@@ -14,24 +14,13 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
         </ol>
         <img src="${imageUrl}">
         `
-    // Here is the HTML formatting for our mission target div.
-   /*
-                <h2>Mission Destination</h2>
-                <ol>
-                    <li>Name: </li>
-                    <li>Diameter: </li>
-                    <li>Star: ${star}</li>
-                    <li>Distance from Earth: </li>
-                    <li>Number of Moons: </li>
-                </ol>
-                <img src="">
-   */
 }
 
 function validateInput(testInput) {
-    if (testInput === ""){
+    testInput = Number(testInput);
+    if (testInput === "" || testInput === null || testInput === 0){
         return "Empty";  
-    } else if (isNaN(testInput)) {
+    } else if (!isNaN(testInput)) {
         return "Is a Number";
     } else {
         return "Not a Number";
@@ -57,19 +46,19 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
         copilotStatus.innerHTML = `Co-pilot ${copilot} is ready`;
     }
 
-    if (fuelLevel < 10000) {
+    if (Number(fuelLevel) < 10000) {
         fuelStatus.innerHTML = "Not enough fuel for the journey";
-        list.styles.visibility = "visible";
+        list.style.visibility = "visible";
         launchStatus.innerHTML = "Shuttle not ready for launch";
-        launchStatus.styles.color = "red";
-    } else if (cargoLevel > 10000) {
+        launchStatus.style.color = "red";
+    } else if (Number(cargoLevel) > 10000) {
         cargoStatus.innerHTML = "Too much mass for the shuttle to take off";
-        list.styles.visibility = "visible";
+        list.style.visibility = "visible";
         launchStatus.innerHTML = "Shuttle not ready for launch";
-        launchStatus.styles.color = "red";
+        launchStatus.style.color = "red";
     } else {
         launchStatus.innerHTML = "Shuttle is ready for launch";
-        launchStatus.styles.color = "green";
+        launchStatus.style.color = "green";
     }
 }
 
@@ -77,12 +66,15 @@ async function myFetch() {
     let planetsReturned;
 
     planetsReturned = await fetch("https://handlers.education.launchcode.org/static/planets.json").then( function(response) {
-        });
+       return response.json()
+    });
 
     return planetsReturned;
 }
 
 function pickPlanet(planets) {
+   let index = Math.floor(Math.random() * planets.length);
+   return planets[index];
 }
 
 module.exports.addDestinationInfo = addDestinationInfo;
